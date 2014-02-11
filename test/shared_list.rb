@@ -106,6 +106,76 @@ module Shared
       assert_equal 5, new4.pos
     end
 
+    def test_insert_after
+      new1 = ListMixin.create(parent_id: 20)
+      assert_equal 1, new1.pos
+
+      new2 = ListMixin.create(parent_id: 20)
+      assert_equal 2, new2.pos
+
+      new3 = ListMixin.create(parent_id: 20)
+      assert_equal 3, new3.pos
+
+      new4 = ListMixin.create(parent_id: 20)
+      assert_equal 4, new4.pos
+
+      new4.insert_after(new3)
+      assert_equal 4, new4.pos
+
+      new3.reload
+      assert_equal 3, new3.pos
+
+      new3.insert_after(new1)
+      assert_equal 1, new1.pos
+
+      new3.reload
+      assert_equal 2, new3.pos
+
+      new5 = ListMixin.create(parent_id: 20)
+      assert_equal 5, new5.pos
+
+      new5.insert_after(new1)
+      assert_equal 2, new5.pos
+
+      new4.reload
+      assert_equal 5, new4.pos
+    end
+
+    def test_insert_before
+      new1 = ListMixin.create(parent_id: 20)
+      assert_equal 1, new1.pos
+
+      new2 = ListMixin.create(parent_id: 20)
+      assert_equal 2, new2.pos
+
+      new3 = ListMixin.create(parent_id: 20)
+      assert_equal 3, new3.pos
+
+      new4 = ListMixin.create(parent_id: 20)
+      assert_equal 4, new4.pos
+
+      new4.insert_before(new3)
+      assert_equal 3, new4.pos
+
+      new3.reload
+      assert_equal 2, new3.pos
+
+      new3.insert_before(new1)
+      assert_equal 0, new1.pos
+
+      new3.reload
+      assert_equal 1, new3.pos
+
+      new5 = ListMixin.create(parent_id: 20)
+      assert_equal 5, new5.pos
+
+      new5.insert_before(new1)
+      assert_equal 0, new5.pos
+
+      new4.reload
+      assert_equal 4, new4.pos
+    end
+
     def test_delete_middle
       assert_equal [1, 2, 3, 4], ListMixin.where(parent_id: 5).order('pos').map(&:id)
 

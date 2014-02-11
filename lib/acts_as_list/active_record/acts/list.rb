@@ -133,6 +133,20 @@ module ActiveRecord
           insert_at_position(position)
         end
 
+        def insert_after(item)
+          acts_as_list_class.transaction do
+            insert_at_position = item.send(position_column) || 0
+            insert_at(insert_at_position + 1)
+          end
+        end
+
+        def insert_before(item)
+          acts_as_list_class.transaction do
+            insert_at_position = item.send(position_column) || 0
+            insert_at(insert_at_position)
+          end
+        end
+
         # Swap positions with the next lower item, if one exists.
         def move_lower
           return unless lower_item
